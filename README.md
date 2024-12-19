@@ -7,6 +7,10 @@ How to reproduce:
 
 -create conda env  
 
--run cat  
+run all 3 commands in terminal separetly:  
 
--run scrape  
+python3 beau_categories.py  
+python3 beau_comp.py  
+python3 beau_reviews.py  
+
+after this, 3 .csv files will be returned. the last one is the df which will be mainly used.
