@@ -6,6 +6,18 @@ How to reproduce:
 -git clone  
 
 -create conda env  
+run in terminal:
+
+conda create --name myenv python=3.12  
+
+conda activate myenv  
+
+
+pip install -r requirements.txt
+
+
+
+
 
 run all 3 commands in terminal separetly:  
 
