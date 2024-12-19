@@ -5,7 +5,6 @@ import time
 import logging
 import re
 
-
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
 
@@ -83,9 +82,9 @@ def has_next_page(soup):
 
 companies_df = pd.read_csv("trustpilot_companies.csv")
 
-
 all_reviews_data = []
 
+max_pages = 5  # Set the maximum number of pages to scrape
 
 for company in companies_df["c_site"]:
     logging.info(f"Scraping reviews for company: {company}")
@@ -104,14 +103,13 @@ for company in companies_df["c_site"]:
         reviews_data.extend(reviews)
         
         
-        if has_next_page(soup):
+        if has_next_page(soup) and page_num < max_pages:
             page_num += 1
             url = f"https://www.trustpilot.com/review/{company}?page={page_num}&stars=1&stars=2&stars=3"
         else:
             break
         
         time.sleep(2)  
-    
     
     all_reviews_data.extend(reviews_data)
 
