@@ -4,10 +4,10 @@ import pandas as pd
 import time
 import logging
 
-# Logging configuration
+
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
-# Fetch HTML content with retry logic
+
 def fetch_html(url, retries=3, delay=5):
     headers = {"User-Agent": "Mozilla/5.0"}
     for attempt in range(retries):
@@ -22,7 +22,7 @@ def fetch_html(url, retries=3, delay=5):
             else:
                 raise
 
-# Main execution
+
 def main():
     url = "https://www.trustpilot.com/categories"
     html_content = fetch_html(url)
