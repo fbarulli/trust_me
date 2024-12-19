@@ -4,10 +4,8 @@ import pandas as pd
 import time
 import logging
 
-# Logging configuration
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
-# Fetch HTML content with retry logic
 def fetch_html(url, retries=3, delay=5):
     headers = {"User-Agent": "Mozilla/5.0"}
     for attempt in range(retries):
@@ -22,42 +20,35 @@ def fetch_html(url, retries=3, delay=5):
             else:
                 raise
 
-# Extract the section containing company cards
 def extract_section(html_content):
     soup = BeautifulSoup(html_content, "html.parser")
     return soup.select_one("#__next > div > div > main > div > div.styles_body__WGdpu > div > section")
 
-# Parse companies with c_trust_score as a float
 def parse_companies_with_float_trust_score(section):
     companies_data = []
-    company_cards = section.select('a[name="business-unit-card"]')  # Select company cards
+    company_cards = section.select('a[name="business-unit-card"]')  
     total_companies = len(company_cards)
 
     for card in company_cards:
         try:
-            # Extract site URL
             site_element = card.select_one("p.styles_websiteUrlDisplayed__QqkCT")
             c_site = site_element.get_text(strip=True) if site_element else None
 
-            # Extract total reviews
             reviews_element = card.select_one("p.styles_ratingText__yQ5S7")
             c_total_reviews = None
             if reviews_element:
                 reviews_text = reviews_element.get_text(strip=True)
                 c_total_reviews = int(reviews_text.split("|")[-1].replace("reviews", "").replace(",", "").strip())
 
-            # Extract trust score as a float
             trust_score_img = card.select_one("div.star-rating_starRating__4rrcf img")
             c_trust_score = None
             if trust_score_img:
                 alt_text = trust_score_img["alt"]
-                c_trust_score = float(alt_text.split()[1])  # Extract float from "TrustScore 4.5 out of 5"
+                c_trust_score = float(alt_text.split()[1])  
 
-            # Extract location
             location_element = card.select_one("span[data-business-location-typography='true']")
             c_location = location_element.get_text(strip=True) if location_element else None
 
-            # Append company data
             if c_site:
                 companies_data.append({
                     "c_site": c_site,
@@ -71,8 +62,7 @@ def parse_companies_with_float_trust_score(section):
     scraped_companies = len(companies_data)
     return companies_data, total_companies, scraped_companies
 
-# Scrape multiple pages with updated parsing logic
-def scrape_multiple_pages_with_float(base_url, category, max_pages=3):
+def scrape_multiple_pages_with_float(base_url, category, max_pages=3):           #        change here for more pages
     all_companies = []
     for current_page in range(1, max_pages + 1):
         try:
@@ -95,13 +85,11 @@ def scrape_multiple_pages_with_float(base_url, category, max_pages=3):
 
     return pd.DataFrame(all_companies)
 
-# Main execution
 def main():
     input_file = "trustpilot_categories.csv"
     output_file = "trustpilot_companies.csv"
     base_url = "https://www.trustpilot.com/categories"
 
-    # Load categories from CSV
     categories_df = pd.read_csv(input_file)
     if "Category Name" not in categories_df.columns:
         logging.error("Input CSV must contain 'Category Name' column.")
@@ -114,10 +102,8 @@ def main():
         df = scrape_multiple_pages_with_float(base_url, category, max_pages=3)
         all_companies.append(df)
 
-    # Combine all companies into a single DataFrame
     final_df = pd.concat(all_companies, ignore_index=True)
 
-    # Write to CSV
     final_df.to_csv(output_file, index=False)
     logging.info(f"Companies successfully written to {output_file}")
 
