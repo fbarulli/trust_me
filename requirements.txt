@@ -77,7 +77,6 @@ requests==2.32.3
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
 rpds-py==0.22.3
-selenium==4.27.1
 Send2Trash==1.8.3
 setuptools==75.6.0
 six==1.17.0
