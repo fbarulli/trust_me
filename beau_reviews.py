@@ -60,11 +60,11 @@ def extract_date_experience(card):
 def extract_review_data(card):
     return {
         "review_title": extract_review_title(card),
-        "customer_name": extract_customer_name(card),
-        "customer_location": extract_customer_location(card),
-        "customer_reviews": extract_customer_reviews(card),
-        "customer_rating": extract_customer_rating(card),
-        "customer_review_text": extract_customer_review_text(card),
+        "cust_name": extract_customer_name(card),
+        "cust_location": extract_customer_location(card),
+        "cust_reviews": extract_customer_reviews(card),
+        "cust_rating": extract_customer_rating(card),
+        "cust_review_text": extract_customer_review_text(card),
         "seller_response": extract_seller_response(card),
         "date_experience": extract_date_experience(card),
     }
