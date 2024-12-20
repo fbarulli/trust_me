@@ -51,6 +51,10 @@ def extract_seller_response(card):
     seller_response_element = card.select_one("p.styles_message__shHhX[data-service-review-business-reply-text-typography='true']")
     return seller_response_element.get_text(strip=True) if seller_response_element else False
 
+def extract_date_experience(card):
+    date_element = card.select_one("p[data-service-review-date-of-experience-typography='true']")
+    return date_element.get_text(strip=True).replace("Date of experience:", "").strip() if date_element else None
+
 def extract_review_data(card):
     return {
         "customer_name": extract_customer_name(card),
@@ -59,6 +63,7 @@ def extract_review_data(card):
         "customer_rating": extract_customer_rating(card),
         "customer_review_text": extract_customer_review_text(card),
         "seller_response": extract_seller_response(card),
+        "date_experience": extract_date_experience(card),
     }
 
 def extract_review_card_details(soup):
