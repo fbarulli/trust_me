@@ -7,7 +7,6 @@ import re
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
-
 def fetch_html(url, retries=3, delay=5):
     headers = {"User-Agent": "Mozilla/5.0"}
     for attempt in range(retries):
@@ -22,6 +21,9 @@ def fetch_html(url, retries=3, delay=5):
             else:
                 raise
 
+def extract_review_title(card):
+    title_element = card.select_one("h2[data-service-review-title-typography='true']")
+    return title_element.get_text(strip=True) if title_element else None
 
 def extract_customer_name(card):
     name_element = card.select_one("aside[aria-label^='Info for']")
@@ -57,6 +59,7 @@ def extract_date_experience(card):
 
 def extract_review_data(card):
     return {
+        "review_title": extract_review_title(card),
         "customer_name": extract_customer_name(card),
         "customer_location": extract_customer_location(card),
         "customer_reviews": extract_customer_reviews(card),
@@ -79,11 +82,9 @@ def get_reviews_dataframe(url):
     reviews = extract_review_card_details(soup)
     return pd.DataFrame(reviews)
 
-
 def has_next_page(soup):
     next_page_element = soup.select_one("a[data-pagination='next']")
     return next_page_element is not None
-
 
 companies_df = pd.read_csv("trustpilot_companies.csv")
 
@@ -106,7 +107,6 @@ for company in companies_df["c_site"]:
         
         reviews = extract_review_card_details(soup)
         reviews_data.extend(reviews)
-        
         
         if has_next_page(soup) and page_num < max_pages:
             page_num += 1
