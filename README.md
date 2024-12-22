@@ -1,41 +1,16 @@
-# Trust_pilot
-
-
-How to reproduce:
-
--git clone  
-
--create conda env  
-
-
-run in terminal:
-
-conda create --name myenv python=3.12  
-
-conda activate myenv  
-
-
-pip install -r requirements.txt
+# <span style="color:#69b3a2"> Data Scientest Project </span>
+Join us in our NLP sentiment analysis project.
 
 
 
+By:
+
+- Kjell Hempel
+- Felix Wacker
+- Fabian Barulli
 
 
-run all commands in terminal separetly:  
-
-python3 beau_categories.py  
-python3 beau_comp.py  
-python3 beau_all_stars.py  
-python3 parse_reviews.py
-
-
-# <span style="color:#69b3a2"> Data Science Template </span>
-
-This repository contains a jupyter notebook that serves as a template for my data science projects. Feel free to use it for yours as well.
-
-You can find the notebook in this repository as `template.ipynb`.
-
-# <b style="color:#69b3a2"> Table of Contents : </b>
+## <b style="color:#69b3a2"> Table of Contents : </b>
 
 - Introduction
   -
@@ -61,6 +36,11 @@ You can find the notebook in this repository as `template.ipynb`.
   -
   - For a more comprehensive explanation on data collection, please see link below:
     - [Totally normal link](https://github.com/fbarulli/trust_me/blob/main/fabian/what_i_learned_scraping.md)
+  - To gather data:
+    -`chmod +x run_scraper.sh`
+    -`./run_scraper.sh`
+
+ 
 
   
 
