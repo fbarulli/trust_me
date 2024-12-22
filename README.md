@@ -37,7 +37,9 @@ By:
   - For a more comprehensive explanation on data collection, please see link below:
     - [Totally normal link](https://github.com/fbarulli/trust_me/blob/main/fabian/what_i_learned_scraping.md)
   - To gather data:
+    
     -`chmod +x run_scraper.sh`
+
     -`./run_scraper.sh`
 
  
