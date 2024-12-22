@@ -1,32 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Async Processes Flowchart with Documentation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .flowchart, .documentation {
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .documentation {
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            grid-column: 1 / -1;
+        }
+        
+        h2 {
+            color: #444;
+            margin-top: 0;
+        }
+        
+        .step {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-left: 3px solid #007bff;
+            background: white;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Asynchronous Web Scraping Process</h1>
+        
+        <div class="flowchart">
+            <h2>Process Flow</h2>
+            <div class="mermaid">
+            sequenceDiagram
+                participant M as Main Program
+                participant C1 as Company 1
+                participant C2 as Company 2
+                participant P1 as Page Fetch 1
+                participant P2 as Page Fetch 2
+                participant F as File System
 
-sequenceDiagram
-    participant M as Main Program
-    participant C1 as Company 1
-    participant C2 as Company 2
-    participant P1 as Page Fetch 1
-    participant P2 as Page Fetch 2
-    participant F as File System
+                Note over M: Program starts
+                M->>C1: Start scraping Company 1
+                
+                Note over C1: Process star ratings 1-3
+                C1->>P1: Fetch page 1
+                C1->>P2: Fetch page 2
+                
+                P1-->>F: Save HTML
+                P2-->>F: Save HTML
+                
+                Note over C1: Wait 1s (rate limit)
+                
+                C1->>P1: Fetch page 3
+                C1->>P2: Fetch page 4
+                
+                P1-->>F: Save HTML
+                P2-->>F: Save HTML
+                
+                Note over C1: Process star ratings 4-5
+                Note over C1: Wait 2s between ratings
+                
+                M->>C2: Start scraping Company 2
+                Note over M,C2: Companies process sequentially
+            </div>
+        </div>
+        
+        <div class="documentation">
+            <h2>Process Documentation</h2>
+            
+            <div class="step">
+                <h3>1. Program Initialization</h3>
+                <p>The main program starts and initializes the HTTP session with retry logic and proper headers.</p>
+            </div>
+            
+            <div class="step">
+                <h3>2. Company Processing</h3>
+                <p>Companies are processed sequentially to maintain control over the scraping process. Each company's data is handled separately.</p>
+            </div>
+            
+            <div class="step">
+                <h3>3. Star Rating Groups</h3>
+                <p>For each company, reviews are processed in two groups:
+                   <ul>
+                       <li>1-3 stars</li>
+                       <li>4-5 stars</li>
+                   </ul>
+                </p>
+            </div>
+            
+            <div class="step">
+                <h3>4. Concurrent Page Fetching</h3>
+                <p>Multiple pages within each star rating group are fetched concurrently:
+                   <ul>
+                       <li>Pages are requested simultaneously</li>
+                       <li>Rate limiting ensures 1s delay between requests</li>
+                       <li>Responses are saved to the file system</li>
+                   </ul>
+                </p>
+            </div>
+            
+            <div class="step">
+                <h3>5. Rate Limiting</h3>
+                <p>Several delay mechanisms are in place:
+                   <ul>
+                       <li>1 second between pages</li>
+                       <li>2 seconds between star rating groups</li>
+                       <li>2 seconds between companies</li>
+                   </ul>
+                </p>
+            </div>
+        </div>
+    </div>
 
-    Note over M: Program starts
-    M->>C1: Start scraping Company 1
-    
-    Note over C1: Process star ratings 1-3
-    C1->>P1: Fetch page 1
-    C1->>P2: Fetch page 2
-    
-    P1-->>F: Save HTML
-    P2-->>F: Save HTML
-    
-    Note over C1: Wait 1s (rate limit)
-    
-    C1->>P1: Fetch page 3
-    C1->>P2: Fetch page 4
-    
-    P1-->>F: Save HTML
-    P2-->>F: Save HTML
-    
-    Note over C1: Process star ratings 4-5
-    Note over C1: Wait 2s between ratings
-    
-    M->>C2: Start scraping Company 2
-    Note over M,C2: Companies process sequentially
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            sequence: {
+                diagramMarginX: 50,
+                diagramMarginY: 10,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35,
+                mirrorActors: false
+            }
+        });
+    </script>
+</body>
+</html>
