@@ -39,7 +39,7 @@ You can find the notebook in this repository as `template.ipynb`.
 
 - Introduction
   -
-  - Description of the project
+  - Description of the **project**
   - Description of the goals
   - Table of Contents
 
@@ -59,15 +59,10 @@ You can find the notebook in this repository as `template.ipynb`.
 
 - Data collection
   -
-  - Loading the dataset
-  - First exploration
-    - Head command to see the columns and data
-    - Describe command to see the ranges of numerical data
-    - Info command as a first quick null check
-  - Data Cleaning
-    - Transforming data types
-    - Handling null values appropriately
-    - Merging tables of data to use in EDA
+  - For a more comprehensive explanation on data collection, please see link below:
+    - [Totally normal link](https://github.com/fbarulli/trust_me/blob/main/fabian/what_i_learned_scraping.md)
+
+  
 
 &nbsp;
 
