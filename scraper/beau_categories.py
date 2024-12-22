@@ -44,9 +44,9 @@ def main():
 
     df = pd.DataFrame({"Category Name": category_names})
     df["Category Name"] = (
-        df["Category Name"].str.replace(r"[&,\-]", "", regex=True)  # Remove &, , and -
-        .str.replace(r"\s+", "_", regex=True)   # Replace one or more spaces with a single underscore
-        .str.replace(r"_+", "_", regex=True)    # Remove any consecutive underscores
+        df["Category Name"].str.replace(r"[&,\-]", "", regex=True)  
+        .str.replace(r"\s+", "_", regex=True)   
+        .str.replace(r"_+", "_", regex=True)    
         .str.lower()
     )            
     df['Category Name'] = df['Category Name'].str.replace("construction_manufacturing", "construction_manufactoring", regex=True)
