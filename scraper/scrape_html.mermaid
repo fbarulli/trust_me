@@ -1,0 +1,52 @@
+flowchart TB
+    Start([Start]) --> Init[Initialize Logging]
+    Init --> ReadCSV[Read Companies CSV]
+    
+    subgraph MainLoop[Main Function]
+        ReadCSV --> CreateSession[Create aiohttp Session]
+        CreateSession --> NextCompany{Next Company?}
+        NextCompany -->|Yes| ScrapeCompany[Start Company Scraping]
+        NextCompany -->|No| End([End])
+        ScrapeCompany --> Sleep2A[Sleep 2s]
+        Sleep2A --> NextCompany
+    end
+    
+    subgraph ScrapeCompanyProcess[Scrape Company Process]
+        ScrapeCompany --> StarGroup{Star Rating Group}
+        StarGroup -->|1-3 Stars| Pages1
+        StarGroup -->|4-5 Stars| Pages2
+        
+        Pages1 --> BuildURL1[Build URL]
+        Pages2 --> BuildURL2[Build URL]
+        
+        BuildURL1 --> FetchPage1[Fetch Page]
+        BuildURL2 --> FetchPage2[Fetch Page]
+        
+        FetchPage1 --> Sleep1A[Sleep 1s]
+        FetchPage2 --> Sleep1B[Sleep 1s]
+        
+        Sleep1A --> NextPage1{More Pages?}
+        Sleep1B --> NextPage2{More Pages?}
+        
+        NextPage1 -->|Yes| BuildURL1
+        NextPage2 -->|Yes| BuildURL2
+        
+        NextPage1 -->|No| Sleep2B[Sleep 2s]
+        NextPage2 -->|No| Sleep2C[Sleep 2s]
+        
+        Sleep2B --> StarGroup
+        Sleep2C --> StarGroup
+    end
+    
+    subgraph FetchPageProcess[Fetch Page Process]
+        FetchPage1 --> TryFetch{Try Fetch}
+        TryFetch -->|Success| SaveHTML[Save HTML File]
+        TryFetch -->|Error| LogError[Log Error]
+        
+        SaveHTML --> ReturnFilename[Return Filename]
+        LogError --> ReturnNull[Return None]
+    end
+    
+    style MainLoop fill:#e1f5fe,stroke:#0277bd
+    style ScrapeCompanyProcess fill:#fff3e0,stroke:#ef6c00
+    style FetchPageProcess fill:#f3e5f5,stroke:#7b1fa2
