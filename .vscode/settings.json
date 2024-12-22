@@ -2,5 +2,6 @@
     "terminal.integrated.automationProfile.osx": {
         "path": "bash"
     },
-    "terminal.integrated.defaultProfile.osx": "bash"
+    "terminal.integrated.defaultProfile.osx": "bash",
+    "python.createEnvironment.contentButton": "show"
 }
