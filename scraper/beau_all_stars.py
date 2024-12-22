@@ -7,17 +7,17 @@ import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 
-# Logging configuration
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Reusable session for HTTP requests
+
 session = requests.Session()
 
-# Constants for tracking progress
+
 COMPLETED_COMPANIES_FILE = "completed_companies.txt"
 OUTPUT_FILE = "trustpilot_reviews.csv"
 
-# Functions
+
 def fetch_html(url, retries=3, delay=5):
     """Fetch the HTML content of a URL with retry logic."""
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -119,7 +119,7 @@ def scrape_reviews(company, stars, max_pages=5):
         else:
             break
 
-        time.sleep(2)  # Avoid overloading the server
+        time.sleep(2)  
 
     return reviews_data
 
