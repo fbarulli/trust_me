@@ -35,7 +35,7 @@ This repository contains a jupyter notebook that serves as a template for my dat
 
 You can find the notebook in this repository as `template.ipynb`.
 
-## <b style="color:#69b3a2"> Table of Contents : </b>
+# <b style="color:#69b3a2"> Table of Contents : </b>
 
 - Introduction
   -
@@ -45,15 +45,15 @@ You can find the notebook in this repository as `template.ipynb`.
 
 &nbsp;
 
-- Setup
-  -
-  - Installation of required modules <span style="color:#B3697A">(think about using a requirements.txt file)</span>
-  - Importing the necessary modules
-  - Setup of various settings that will be used throughout the project. Some examples:
-    - Configure the figure_format
-    - Set up logging if needed
-    - Set seaborn / matplotlib themes
-    - Set pandas max columns options
+- <span style="font-size: 24px;"> Env Setup</span>
+
+  - After cloning gitrepo
+  - Change permissions:
+    - `chmod +x setup_env.sh`
+  - Run script:
+    - `./setup_env.sh`
+  
+  - Confirm correct installation.
 
 &nbsp;
 
