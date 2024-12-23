@@ -14,7 +14,6 @@ async def fetch_page(session, url, company, page_num, stars):
     try:
         async with session.get(url) as response:
             content = await response.text()
-            # Save HTML with meaningful filename
             filename = f"raw_html/{company}_{stars}_{page_num}.html"
             Path("raw_html").mkdir(exist_ok=True)
             with open(filename, 'w', encoding='utf-8') as f:
