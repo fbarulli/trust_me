@@ -1,14 +1,13 @@
 import asyncio
 import aiofiles
 import pandas as pd
-from bs4 import BeautifulSoup, SoupStrainer
+from bs4 import BeautifulSoup
 import logging
 from pathlib import Path
 import re
 from functools import lru_cache
-from concurrent.futures import ThreadPoolExecutor
 import nest_asyncio
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 logging.basicConfig(
     level=logging.INFO,
