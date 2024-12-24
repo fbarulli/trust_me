@@ -4,7 +4,7 @@ Usage Example:
 python one_company_reviews.py --max_5_star_pages 5 "https://www.trustpilot.com/review/bluegrasshempoil.com"
 
 
-
+after running this script, run parse_reviews.py to process the raw html files into a csv file.
 
 
 

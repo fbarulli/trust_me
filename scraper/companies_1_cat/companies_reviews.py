@@ -1,3 +1,16 @@
+
+'''
+after runing this script, run parse_reviews.py to process the raw html files into a csv file.
+'''
+
+
+
+
+
+
+
+
+
 import requests
 import asyncio
 import aiohttp

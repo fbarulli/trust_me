@@ -24,7 +24,7 @@ Any other categories from Trustpilot are valid.
 returns a csv with company names from one category, change max_pages to scrape more pages.
 
 
-
+after running the script, you can run the next script to scrape reviews for each company.
 
 
 
