@@ -12,6 +12,7 @@
 
 Example Usage:
 python companies_1_cat.py "Business Services"
+Any other categories from Trustpilot are valid.
 
 
 
