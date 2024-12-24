@@ -11,7 +11,11 @@
 
 
 Example Usage:
-python companies_1_cat.py "Business Services"
+https://www.trustpilot.com/categories/animals_pets
+
+copy last part of the url and run the script with that as an argument:
+
+python companies_1_cat.py "animals_pets"
 Any other categories from Trustpilot are valid.
 
 
