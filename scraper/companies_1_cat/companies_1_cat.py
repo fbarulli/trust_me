@@ -17,7 +17,7 @@ Any other categories from Trustpilot are valid.
 
 
 
-
+returns a csv with reviews from one category, change max_pages to scrape more pages.
 
 
 
@@ -102,7 +102,7 @@ def parse_companies_with_float_trust_score(section):
             logging.error(f"Error parsing company data: {e}")
     return companies_data
 
-async def scrape_multiple_pages_with_float(session, base_url, category, max_pages=3):
+async def scrape_multiple_pages_with_float(session, base_url, category, max_pages=3):          # change max_pages
     all_companies = []
     for current_page in range(1, max_pages + 1):
         try:
