@@ -17,7 +17,7 @@ Any other categories from Trustpilot are valid.
 
 
 
-returns a csv with reviews from one category, change max_pages to scrape more pages.
+returns a csv with company names from one category, change max_pages to scrape more pages.
 
 
 
@@ -133,7 +133,7 @@ async def main():
         companies = await scrape_multiple_pages_with_float(session, base_url, category, max_pages=3)
 
     df = pd.DataFrame(companies)
-    output_file = f"{category}_companies.csv"
+    output_file = "companies.csv"
     df.to_csv(output_file, index=False)
     logging.info(f"Companies successfully written to {output_file}")
 
