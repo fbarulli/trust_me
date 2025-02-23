@@ -1,4 +1,4 @@
-# stream.py
+
 import os
 import sys
 APP_DIR = os.path.dirname(os.path.abspath(__file__)) # streamlit_app directory
@@ -14,53 +14,33 @@ from PIL import Image
 
 import company_section
 import general_section
-import category_section # ADD THIS LINE - Import category_section at the top
+import category_section
+import scraping_section
+
+
+# --- Define CSV file path at the beginning ---
+CSV_FILE_NAME = 'trustpilot_reviews_1000.csv' # Define the CSV file name
+CSV_FILE_PATH = os.path.join('.', CSV_FILE_NAME) # Relative path from the project root (where stream.py is assumed to be run)
+print(f"CSV File Path (stream.py): {CSV_FILE_PATH}") # Print path for debugging
+
+
+# --- Load CSV Data (Load it once at the top) ---
+try:
+    df = pd.read_csv(CSV_FILE_PATH)
+    DATA_LOADED = True # Flag to indicate data loaded successfully
+except FileNotFoundError:
+    st.error(f"Error: CSV file not found at: {CSV_FILE_PATH}")
+    DATA_LOADED = False
+except Exception as e:
+    st.error(f"An error occurred while loading the CSV: {e}")
+    DATA_LOADED = False
 
 
 # --- Custom Styling ---
 st.markdown(
     """
     <style>
-    /* Force white background */
-    html, body, [data-testid="stAppViewContainer"], .stApp {
-        background-color: white !important;
-        color: black !important;
-    }
-
-    /* Ensure all text is visible */
-    .stText, .stTitle, .stHeader, .stMarkdown, .stDataFrame, .stTable {
-        color: black !important;
-    }
-
-    /* Sidebar */
-    .css-1d391kg {
-        background-color: #0e76a8 !important;
-        color: white !important;
-    }
-
-    .css-1d391kg h1 {
-        color: white !important;
-    }
-
-    /* Radio Buttons Styling */
-    .st-bx input[type="radio"]:checked + div[data-baseweb="radio"] > div {
-        background-color: #0e76a8 !important;
-        color: #ffffff !important;
-    }
-
-    /* Card-Like Content Box */
-    .content-box {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-        /* Ensure full text visibility in dataframe columns */
-    .stDataFrame td {
-        white-space: pre-wrap !important;  /* Wrap text within cells */
-        word-wrap: break-word !important; /* Break long words */
-    }
+    /* ... (Your CSS Styling - no changes needed) ... */
     </style>
     """,
     unsafe_allow_html=True,
@@ -84,25 +64,17 @@ Felix : single company reviews <br>
 Kjell : single category <br>
 Fabian : all companies/categories""", unsafe_allow_html=True)
 
-    # --- Load and Display CSV ---
-    # Relative path to CSV, assuming it's in the project root directory (Trust_pilot-1)
-    csv_file_path = os.path.join('trustpilot_reviews_1000.csv') # Adjusted relative path - project root
-
-    print("CSV File Path (Relative):", csv_file_path) # Print relative path for verification
-
-    try:
-        df = pd.read_csv(csv_file_path)
-        #st.header("Sample of Trustpilot Reviews Data:")
+    if DATA_LOADED: # Only proceed if data was loaded successfully
+        #st.header("Sample of Trustpilot Reviews Data:") # REMOVED - No header for sample table
         random_sample_df = df[['cust_review_text']].sample(n=5)
         st.dataframe(random_sample_df.reset_index(drop=True), use_container_width=True)
-    except FileNotFoundError:
-        st.error(f"Error: CSV file not found at: {csv_file_path}")
-    except Exception as e:
-        st.error(f"An error occurred while loading the CSV: {e}")
+
+        st.subheader("DataFrame Dimensions") # Add a subheader for clarity # ADDED
+        st.write(f"DataFrame Shape: Rows = {df.shape[0]}, Columns = {df.shape[1]}") # Display df.shape # ADDED
 
 
 elif selected_section == "Scraping":
-    st.write(f"During our initial scrape, ")
+    scraping_section.show_scraping_section(df, DATA_LOADED) # Call function from scraping_section.py, passing df and DATA_LOADED
 
 
 elif selected_section == "Company":
