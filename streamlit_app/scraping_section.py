@@ -4,9 +4,12 @@ import pandas as pd
 import os
 import logging
 from typing import Optional
+from category_section import display_resized_image # Import display_resized_image
 
 # Set up logging for this module
 logger = logging.getLogger(__name__)
+
+APP_DIR: str = os.path.dirname(os.path.abspath(__file__)) # Define APP_DIR
 
 # --- CORRECTED FILE NAME and PATH ---
 SCRAPED_CSV_FILE_NAME: str = 'trustpilot_reviews.csv'
@@ -87,18 +90,19 @@ def show_scraping_section() -> None:
     #st.write("- **Trustpilot Website:** [https://www.trustpilot.com/](https://www.trustpilot.com/) - The primary source for customer reviews.")
 
     st.subheader("Scraping Methodology") # Keep the subheader "Scraping Methodology"
-    st.write("Our scraper was designed to (general description remains):") # Keep general description
+    st.write("Our scraper was designed to:") # Keep general description
     st.markdown("""
-    - **Target specific categories and/or companies** (depending on the scraping script and parameters used).
-    - **Extract key information from each review, including:**
-        - Review text
-        - Rating/Stars given
-        - Date of review
-        - Company/Category information (where available)
-    - **Handle pagination** to collect reviews across multiple pages.
-    - **Implement rate limiting and error handling** to respect Trustpilot's terms of service and ensure robust scraping.
-    """)
+    - Initially, scrape up to 20 pages of reviews per company, grouping ratings into two, 5-4 and 3-1.""")
+    st.info("Which resulted in:") # Keep general description
+
+    # --- IMAGE HERE ---
+    image_path: str = os.path.join(APP_DIR, 'Images', 'countplot_cust_rating.png')
+    display_resized_image(image_path, "Customer Rating Distribution from Scraped Data")
+    # --- END IMAGE ---
+
+
     logger.info("show_scraping_section: Finished") # Log function finish
+
 
 
 if __name__ == '__main__':
