@@ -50,7 +50,16 @@ def show_scraping_section() -> None:
     logger.debug(f"show_scraping_section: Displayed hardcoded shape: {hardcoded_shape}")
     st.write(f"And we found reviews for **[Number of Companies -  To be implemented if needed]** unique companies.")
     st.subheader("Extracted Data Fields:")
-    st.markdown(" - [Column 1 - To be implemented if needed]\n - [Column 2 - To be implemented if needed]\n - [Column 3 - To be implemented if needed]\n - ...")
+    st.markdown("""
+- `review_title`
+- `cust_name`
+- `cust_location`
+- `cust_reviews`
+- `cust_rating`
+- `cust_review_text`
+- `seller_response`
+- `date_experience`
+- `company`""")
     logger.debug(f"show_scraping_section: Displayed placeholder columns.")
 
 
