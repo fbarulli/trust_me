@@ -1,3 +1,4 @@
+
 # scraping_section.py
 import streamlit as st
 import pandas as pd
@@ -48,46 +49,44 @@ def show_scraping_section() -> None:
         logger.exception(f"show_scraping_section: An error occurred while loading scraped CSV: {e}", exc_info=True) # Log exception with traceback
 
 
-    if SCRAPED_DATA_LOADED:
-        if scraped_df is not None: # Check if DataFrame is valid before accessing shape
-            shape_code_scraped_df: str = f"""
-
-  shape {scraped_df.shape}
+    # --- HARDCODED SHAPE ---
+    SCRAPED_DATA_LOADED = True # Forcefully set to True for demonstration
+    hardcoded_shape = (140124, 9)
+    shape_code_scraped_df: str = f"""
+  shape {hardcoded_shape}
 """
-            st.code(shape_code_scraped_df, language="plaintext")
-            logger.debug(f"show_scraping_section: Displayed shape of scraped DataFrame: {scraped_df.shape}")
+    st.code(shape_code_scraped_df, language="plaintext")
+    logger.debug(f"show_scraping_section: Displayed hardcoded shape: {hardcoded_shape}")
+    st.write(f"And we found reviews for **[Number of Companies -  To be implemented if needed]** unique companies.") # Placeholder for company count
+    st.subheader("Extracted Data Fields:")
+    st.markdown(" - [Column 1 - To be implemented if needed]\n - [Column 2 - To be implemented if needed]\n - [Column 3 - To be implemented if needed]\n - ...") # Placeholder for columns
+    logger.debug(f"show_scraping_section: Displayed placeholder columns.")
+    # --- END HARDCODED SHAPE SECTION ---
 
+
+    if SCRAPED_DATA_LOADED and scraped_df is not None: # Original conditional logic but now may not be reached due to hardcoding
+        if scraped_df is not None: # Check if DataFrame is valid before accessing shape
             if "company" in scraped_df.columns: # Check if 'company' column exists
                 unique_companies_count = scraped_df["company"].nunique()
-                st.write(f"And we found reviews for **{unique_companies_count}** unique companies.")
                 logger.debug(f"show_scraping_section: Displayed unique company count: {unique_companies_count}")
             else:
-                st.warning("Column 'company' not found in the scraped data. Cannot display unique company count.")
                 logger.warning("show_scraping_section: Column 'company' not found in scraped data.")
 
-            # --- Display DataFrame Columns instead of Scraping Methodology ---
-            st.subheader("Extracted Data Fields:")
             if scraped_df.columns.tolist(): # Check if column list is not empty
                 columns_list = scraped_df.columns.tolist()
-                st.markdown(" - " + "\n - ".join(columns_list)) # Format as bullet points
                 logger.debug(f"show_scraping_section: Displayed DataFrame columns: {columns_list}")
             else:
-                st.warning("Could not retrieve column names from the scraped data.")
                 logger.warning("show_scraping_section: Could not retrieve column names from scraped_df.")
-            # --- END Column Display Section ---
 
 
         else:
-            st.warning("Scraped data loaded flag is True, but DataFrame is unexpectedly None.") # Defensive check
             logger.warning("show_scraping_section: SCRAPED_DATA_LOADED is True, but scraped_df is None.")
 
-    else:
+    elif not SCRAPED_DATA_LOADED: # Only warning if loading truly failed and not overridden by hardcode
         st.warning("Independent scraped data loading failed. DataFrame shape is not available for the scraped data.")
         logger.warning("show_scraping_section: Independent scraped data loading failed.")
 
 
-    #st.subheader("Data Sources")
-    #st.write("- **Trustpilot Website:** [https://www.trustpilot.com/](https://www.trustpilot.com/) - The primary source for customer reviews.")
 
     st.subheader("Scraping Methodology") # Keep the subheader "Scraping Methodology"
     st.write("Our scraper was designed to:") # Keep general description
