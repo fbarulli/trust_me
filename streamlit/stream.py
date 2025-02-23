@@ -1,13 +1,21 @@
+import os
+import sys
+APP_DIR = os.path.dirname(os.path.abspath(__file__)) # streamlit_app directory
+PARENT_DIR = os.path.dirname(APP_DIR) # trust-me-data-analysis directory - not needed for this specific case
+sys.path.insert(0, APP_DIR) # Add streamlit_app directory to path
+
+print("Streamlit Script Working Directory:", os.getcwd())
+print("Python Path (inside stream.py - after path modification):", sys.path) # Check PATH after modification
 
 import streamlit as st
 import pandas as pd
-import os
 from PIL import Image
 
-# Import modules for sections (relative imports now)
-from . import category_section
-from . import company_section
-from . import general_section
+
+
+import category_section
+import company_section
+import general_section
 
 # --- Custom Styling ---
 st.markdown(
