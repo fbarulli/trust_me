@@ -59,7 +59,7 @@ st.markdown(
 )
 
 # --- App Structure ---
-st.title("🚀 Trust Me - Supply Chain - Customer Satisfaction")
+st.title("🚀 Trust Me - Supply Chain -  "  "  Customer Satisfaction")
 
 # Sidebar Navigation
 selected_section = st.sidebar.radio(
@@ -70,8 +70,29 @@ selected_section = st.sidebar.radio(
 
 # Main Content Area
 if selected_section == "Intro":
-    st.write(f"🚀 Intro Section Selected. (Content for Intro will go here)")
+    st.markdown(f"""Join us as we investigate how [Truspilot](https://www.trustpilot.com/) reviews can be used to analyze customer satisfaction.<br><br>
+Our group consists of: Felix, Kjell, and Fabian, as we take different approaches to classify customer sentiment and ratings.<br><br>
+Felix : single company reviews <br>
+Kjell : single category <br>
+Fabian : all companies/categories""", unsafe_allow_html=True) 
+             
+
 elif selected_section == "Scraping":
     st.write(f"🚀 Scraping Section Selected. (Content for Scraping will go here)")
+
+
+
+
+
+
+
+
+
+elif selected_section == "Company":
+    company_section.show_company_section() # Call function from company_section.py
+elif selected_section == "General":
+    general_section.show_general_section() # Call function from general_section.py
+elif selected_section == "Category":
+    st.write(f"🚀 Category Section Selected. (Content for Category will go here)")
 else:
     st.write(f"🚀 {selected_section} Section Selected. (Not yet customized)")
