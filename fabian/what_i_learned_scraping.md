@@ -30,4 +30,3 @@ I found two working solutions. I’m unsure which one is "better," and for this 
 
 By doing so, I may have introduced some kind of bias, as I scraped companies with the default sorting of most relevant. The other options were by most recent or by review count. As I already have a satisfactory dataset (maybe too big, hehe) with a shape of `(140124, 8)`. I’m calling a premature "enough is enough" and will face these pitfalls as they come. I may (or may not, hehe) have also introduced some bias by not focusing on the subcategories, as I found this cumbersome and had already had enough.
 
-For more information on the scraping process functions, please view the flowcharts [One](https://github.com/fbarulli/trust_me/blob/main/scraper/beau_all_stars.mermaid), [two](https://github.com/fbarulli/trust_me/blob/main/scraper/parse_reviews.mermaid), which I found to be pretty cool.
