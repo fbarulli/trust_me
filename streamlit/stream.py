@@ -1,12 +1,13 @@
+
 import streamlit as st
 import pandas as pd
 import os
 from PIL import Image
 
-# Import modules for sections
-import category_section
-import company_section
-import general_section
+# Import modules for sections (relative imports now)
+from . import category_section
+from . import company_section
+from . import general_section
 
 # --- Custom Styling ---
 st.markdown(
