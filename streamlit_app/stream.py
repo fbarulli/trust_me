@@ -80,8 +80,8 @@ Fabian : all companies/categories""", unsafe_allow_html=True)
             random_sample_df: pd.DataFrame = df[['cust_review_text']].sample(n=5)
             st.dataframe(random_sample_df.reset_index(drop=True), use_container_width=True)
 
-            st.subheader("DataFrame Dimensions") # Add a subheader for clarity
-            st.write(f"DataFrame Shape: Rows = {df.shape[0]}, Columns = {df.shape[1]}") # Display df.shape
+            #st.subheader("DataFrame Dimensions") # Add a subheader for clarity
+            #st.write(f"DataFrame Shape: Rows = {df.shape[0]}, Columns = {df.shape[1]}") # Display df.shape
             logger.debug("display_intro_section: Sample DataFrame and dimensions displayed.")
         except Exception as e:
             logger.exception("display_intro_section: Error displaying sample DataFrame or dimensions.", exc_info=True) # Include traceback

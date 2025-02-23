@@ -20,9 +20,9 @@ def show_scraping_section() -> None:
     logger.debug(f"show_scraping_section: Constructed CSV path: {SCRAPED_CSV_FILE_PATH}") # Log the constructed path
 
     st.header("🌐 Scraping Process")
-    st.write(f"During our initial scrape, we collected customer reviews from [Trustpilot](https://www.trustpilot.com/).")
+    st.write(f"During our initial scrape we collected:")
 
-    st.subheader("Shape of Independently Loaded Scraped Data") # New subheader
+    #st.subheader("Shape of Independently Loaded Scraped Data") # New subheader
 
     # --- Load a DIFFERENT CSV within scraping_section.py ---
     logger.info(f"show_scraping_section: Attempting to load scraped data from: {SCRAPED_CSV_FILE_PATH}")
@@ -62,8 +62,8 @@ def show_scraping_section() -> None:
         logger.warning("show_scraping_section: Independent scraped data loading failed.")
 
 
-    st.subheader("Data Sources")
-    st.write("- **Trustpilot Website:** [https://www.trustpilot.com/](https://www.trustpilot.com/) - The primary source for customer reviews.")
+    #st.subheader("Data Sources")
+    #st.write("- **Trustpilot Website:** [https://www.trustpilot.com/](https://www.trustpilot.com/) - The primary source for customer reviews.")
 
     st.subheader("Scraping Methodology")
     st.write("Our scraper was designed to:")
