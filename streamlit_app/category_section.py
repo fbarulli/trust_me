@@ -18,6 +18,7 @@ def display_resized_image(image_path, caption, max_width=800):
         st.warning(f"⚠️ Image not found: {image_path}")
 
 def show_category_section(category_name="sports"): # Parameterized category name, default to "sports"
+    # print(f"Current Working Directory (category_section.py): {os.getcwd()}") # Debugging line - uncomment if needed
     st.header(f"📊 {category_name.capitalize()} Category Analysis") # Dynamic header
 
     # Sub-Selection for Category
@@ -45,7 +46,7 @@ def show_category_section(category_name="sports"): # Parameterized category name
         # DF Info Image
         with st.expander("📷 DF Info (Click to Expand)"):
             # Relative image path, assuming Images folder is within streamlit_app directory
-            df_info_path = os.path.join('streamlit_app', "Images", f"df info {category_name}.png") # Relative image path
+            df_info_path = os.path.join('Images', f"df info {category_name}.png") # Relative image path - CORRECTED PATH
             display_resized_image(df_info_path, "DF Info")
 
         st.markdown("### 📝 Description")
@@ -59,10 +60,10 @@ def show_category_section(category_name="sports"): # Parameterized category name
 
         # EDA Images
         eda_images = [
-            ("Rating distribution", os.path.join('streamlit_app', "Images", f"Rating distribution {category_name}.png")), # Relative paths
-            ("Sentiment distribution", os.path.join('streamlit_app', "Images", f"Sentiment {category_name}.png")),       # Relative paths
-            ("Top 10 Word Ranking", os.path.join('streamlit_app', "Images", "Word ranking top 10.png")),     # Relative path
-            ("Top 10 Negative Word Ranking", os.path.join('streamlit_app', "Images", "Word Ranking neg 10.png")), # Relative path
+            ("Rating distribution", os.path.join('Images', f"Rating distribution {category_name}.png")), # Relative paths - CORRECTED PATH
+            ("Sentiment distribution", os.path.join('Images', f"Sentiment {category_name}.png")),       # Relative paths - CORRECTED PATH
+            ("Top 10 Word Ranking", os.path.join('Images', "Word ranking top 10.png")),     # Relative path - CORRECTED PATH
+            ("Top 10 Negative Word Ranking", os.path.join('Images', "Word Ranking neg 10.png")), # Relative path - CORRECTED PATH
         ]
 
         with st.expander("📷 Exploratory Data Analysis (Click to Expand)"):
@@ -94,14 +95,20 @@ def show_category_section(category_name="sports"): # Parameterized category name
 
         # Model Results Images
         model_images = [
-            ("Logistic Regression Results", os.path.join('streamlit_app', "Images", "LR Ergebnis.png")), # Relative paths
-            ("XGBoost Results", os.path.join('streamlit_app', "Images", "XGBoost Ergebnis.png")),      # Relative paths
+            ("Logistic Regression Results", os.path.join('Images', "LR Ergebnis.png")), # Relative paths - CORRECTED PATH
+            ("XGBoost Results", os.path.join('Images', "XGBoost Ergebnis.png")),      # Relative paths - CORRECTED PATH
         ]
 
         with st.expander("📷 Model Results (Click to Expand)"):
             for title, img_path in model_images:
+                # --- Debugging: Print image path before displaying ---
+                print(f"Trying to display image: {img_path}")
                 display_resized_image(img_path, title)
 
         st.markdown("### 📝 Description")
         st.write("These images showcase the model results.")
         st.markdown('</div>', unsafe_allow_html=True)
+
+if __name__ == '__main__':
+    st.set_page_config(layout="wide") # Optional: Set page layout if running standalone
+    show_category_section() # You can run it directly to test the section
