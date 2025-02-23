@@ -22,7 +22,7 @@ def show_scraping_section() -> None:
     logger.info("show_scraping_section: Starting")  # Log function start
     logger.debug(f"show_scraping_section: Constructed CSV path: {SCRAPED_CSV_FILE_PATH}") # Log the constructed path
 
-    st.header("🌐 Scraping Process")
+    st.header("🌐 Initial Scrape")
     st.write(f"During our initial scrape we collected:")
 
     #st.subheader("Shape of Independently Loaded Scraped Data") # New subheader
@@ -97,11 +97,20 @@ def show_scraping_section() -> None:
 
     # --- IMAGE HERE ---
     image_path: str = os.path.join(APP_DIR, 'Images', 'countplot_cust_rating.png')
-    display_resized_image(image_path, "Customer Rating Distribution from Scraped Data")
+    display_resized_image(image_path, "Customer Rating Distribution from Initial Scrape")
     # --- END IMAGE ---
+
+    st.header("🌐 Subsequent Scrape")
+    st.markdown("""
+    - There was a need for a more balanced dataset, therefore an approach with this in mind was made. Resulting in:""")
+    # ---  streamlit_app/Images/countplot_scrape_2.png  ## ---
+    image_path_2: str = os.path.join(APP_DIR, 'Images', 'countplot_scrape_2.png')
+    display_resized_image(image_path_2, "Customer Rating Distribution from Subsequent Scrape")
 
 
     logger.info("show_scraping_section: Finished") # Log function finish
+
+
 
 
 
