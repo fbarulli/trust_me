@@ -59,7 +59,7 @@ st.markdown(
 )
 
 # --- App Structure ---
-st.title("🚀 Trust Me - Data Analysis")
+st.title("🚀 Trust Me - Supply Chain - Customer Satisfaction")
 
 # Sidebar Navigation
 selected_section = st.sidebar.radio(
