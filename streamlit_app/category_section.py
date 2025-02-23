@@ -7,6 +7,7 @@ from PIL import Image
 APP_DIR = os.path.dirname(os.path.abspath(__file__)) # category_section.py's directory (same as stream.py)
 PARENT_DIR = os.path.dirname(APP_DIR) # Parent directory of streamlit_app (trust-me-data-analysis)
 
+
 # Function to resize and display images
 def display_resized_image(image_path, caption, max_width=800):
     if os.path.exists(image_path):
@@ -31,8 +32,9 @@ def show_category_section(category_name="sports"): # Parameterized category name
         st.markdown('<div class="content-box">', unsafe_allow_html=True)
         st.subheader("📂 Data Overview")
 
-        # Load DataFrame
-        df_path = os.path.join(APP_DIR, "trustpilot_reviews_1000.csv") # Robust file path
+        # Load DataFrame - Path updated to project root relative path
+        df_path = os.path.join('trustpilot_reviews_1000.csv') # Adjusted relative path - project root
+
         if os.path.exists(df_path):
             df_rev = pd.read_csv(df_path)
             st.write("Displaying first **10** rows for better performance:")
@@ -42,7 +44,8 @@ def show_category_section(category_name="sports"): # Parameterized category name
 
         # DF Info Image
         with st.expander("📷 DF Info (Click to Expand)"):
-            df_info_path = os.path.join(APP_DIR, "Images", f"df info {category_name}.png") # Robust image path
+            # Relative image path, assuming Images folder is within streamlit_app directory
+            df_info_path = os.path.join('streamlit_app', "Images", f"df info {category_name}.png") # Relative image path
             display_resized_image(df_info_path, "DF Info")
 
         st.markdown("### 📝 Description")
@@ -56,10 +59,10 @@ def show_category_section(category_name="sports"): # Parameterized category name
 
         # EDA Images
         eda_images = [
-            ("Rating distribution", os.path.join(APP_DIR, "Images", f"Rating distribution {category_name}.png")), # Robust paths
-            ("Sentiment distribution", os.path.join(APP_DIR, "Images", f"Sentiment {category_name}.png")),       # Robust paths
-            ("Top 10 Word Ranking", os.path.join(APP_DIR, "Images", "Word ranking top 10.png")),     # Path as is if generic
-            ("Top 10 Negative Word Ranking", os.path.join(APP_DIR, "Images", "Word Ranking neg 10.png")), # Path as is if generic
+            ("Rating distribution", os.path.join('streamlit_app', "Images", f"Rating distribution {category_name}.png")), # Relative paths
+            ("Sentiment distribution", os.path.join('streamlit_app', "Images", f"Sentiment {category_name}.png")),       # Relative paths
+            ("Top 10 Word Ranking", os.path.join('streamlit_app', "Images", "Word ranking top 10.png")),     # Relative path
+            ("Top 10 Negative Word Ranking", os.path.join('streamlit_app', "Images", "Word Ranking neg 10.png")), # Relative path
         ]
 
         with st.expander("📷 Exploratory Data Analysis (Click to Expand)"):
@@ -91,8 +94,8 @@ def show_category_section(category_name="sports"): # Parameterized category name
 
         # Model Results Images
         model_images = [
-            ("Logistic Regression Results", os.path.join(APP_DIR, "Images", "LR Ergebnis.png")), # Robust paths
-            ("XGBoost Results", os.path.join(APP_DIR, "Images", "XGBoost Ergebnis.png")),      # Robust paths
+            ("Logistic Regression Results", os.path.join('streamlit_app', "Images", "LR Ergebnis.png")), # Relative paths
+            ("XGBoost Results", os.path.join('streamlit_app', "Images", "XGBoost Ergebnis.png")),      # Relative paths
         ]
 
         with st.expander("📷 Model Results (Click to Expand)"):

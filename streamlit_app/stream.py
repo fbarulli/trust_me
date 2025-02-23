@@ -1,3 +1,4 @@
+# stream.py
 import os
 import sys
 APP_DIR = os.path.dirname(os.path.abspath(__file__)) # streamlit_app directory
@@ -55,6 +56,11 @@ st.markdown(
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
     }
+        /* Ensure full text visibility in dataframe columns */
+    .stDataFrame td {
+        white-space: pre-wrap !important;  /* Wrap text within cells */
+        word-wrap: break-word !important; /* Break long words */
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -79,7 +85,11 @@ Kjell : single category <br>
 Fabian : all companies/categories""", unsafe_allow_html=True)
 
     # --- Load and Display CSV ---
-    csv_file_path = os.path.join(PARENT_DIR, 'streamlit', 'trustpilot_reviews_1000.csv') # Construct path to CSV
+    # Relative path to CSV, assuming it's in the project root directory (Trust_pilot-1)
+    csv_file_path = os.path.join('trustpilot_reviews_1000.csv') # Adjusted relative path - project root
+
+    print("CSV File Path (Relative):", csv_file_path) # Print relative path for verification
+
     try:
         df = pd.read_csv(csv_file_path)
         #st.header("Sample of Trustpilot Reviews Data:")
