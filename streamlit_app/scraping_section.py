@@ -53,6 +53,27 @@ def show_scraping_section() -> None:
 """
             st.code(shape_code_scraped_df, language="plaintext")
             logger.debug(f"show_scraping_section: Displayed shape of scraped DataFrame: {scraped_df.shape}")
+
+            if "company" in scraped_df.columns: # Check if 'company' column exists
+                unique_companies_count = scraped_df["company"].nunique()
+                st.write(f"And we found reviews for **{unique_companies_count}** unique companies.")
+                logger.debug(f"show_scraping_section: Displayed unique company count: {unique_companies_count}")
+            else:
+                st.warning("Column 'company' not found in the scraped data. Cannot display unique company count.")
+                logger.warning("show_scraping_section: Column 'company' not found in scraped data.")
+
+            # --- Display DataFrame Columns instead of Scraping Methodology ---
+            st.subheader("Extracted Data Fields:")
+            if scraped_df.columns.tolist(): # Check if column list is not empty
+                columns_list = scraped_df.columns.tolist()
+                st.markdown(" - " + "\n - ".join(columns_list)) # Format as bullet points
+                logger.debug(f"show_scraping_section: Displayed DataFrame columns: {columns_list}")
+            else:
+                st.warning("Could not retrieve column names from the scraped data.")
+                logger.warning("show_scraping_section: Could not retrieve column names from scraped_df.")
+            # --- END Column Display Section ---
+
+
         else:
             st.warning("Scraped data loaded flag is True, but DataFrame is unexpectedly None.") # Defensive check
             logger.warning("show_scraping_section: SCRAPED_DATA_LOADED is True, but scraped_df is None.")
@@ -65,11 +86,11 @@ def show_scraping_section() -> None:
     #st.subheader("Data Sources")
     #st.write("- **Trustpilot Website:** [https://www.trustpilot.com/](https://www.trustpilot.com/) - The primary source for customer reviews.")
 
-    st.subheader("Scraping Methodology")
-    st.write("Our scraper was designed to:")
+    st.subheader("Scraping Methodology") # Keep the subheader "Scraping Methodology"
+    st.write("Our scraper was designed to (general description remains):") # Keep general description
     st.markdown("""
     - **Target specific categories and/or companies** (depending on the scraping script and parameters used).
-    - **Extract key information** from each review, including:
+    - **Extract key information from each review, including:**
         - Review text
         - Rating/Stars given
         - Date of review
