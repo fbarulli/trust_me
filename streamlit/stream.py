@@ -11,9 +11,6 @@ import streamlit as st
 import pandas as pd
 from PIL import Image
 
-
-
-import category_section
 import company_section
 import general_section
 
@@ -72,11 +69,9 @@ selected_section = st.sidebar.radio(
 )
 
 # Main Content Area
-if selected_section == "Category":
-    category_section.show_category_section()
-elif selected_section == "Company":
-    company_section.show_company_section()
-elif selected_section == "General":
-    general_section.show_general_section()
+if selected_section == "Intro":
+    st.write(f"🚀 Intro Section Selected. (Content for Intro will go here)")
+elif selected_section == "Scraping":
+    st.write(f"🚀 Scraping Section Selected. (Content for Scraping will go here)")
 else:
     st.write(f"🚀 {selected_section} Section Selected. (Not yet customized)")
