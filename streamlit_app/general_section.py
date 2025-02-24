@@ -12,6 +12,9 @@ logger = logging.getLogger(__name__)
 APP_DIR: str = os.path.dirname(os.path.abspath(__file__))  # general_section.py's directory (same as stream.py)
 PARENT_DIR: str = os.path.dirname(APP_DIR)  # Parent directory of streamlit_app (trust-me-data-analysis)
 IMAGES_DIR: str = os.path.join(APP_DIR, 'Images')  # Define IMAGES_DIR globally
+FABIAN_IMG_DIR: str = os.path.join(IMAGES_DIR, 'fabian_img/ngram')  # Subdirectory for Ngram images
+SCRAPE_1_DIR: str = os.path.join(IMAGES_DIR, 'fabian_img', 'ngram_sentiment', 'scrape_1')  # Initial scrape images
+SCRAPE_2_DIR: str = os.path.join(IMAGES_DIR, 'fabian_img', 'ngram_sentiment', 'scrape_2')  # Subsequent scrape images
 
 
 def display_resized_image(image_path: str, caption: str, max_width: int = 800) -> None:
@@ -38,7 +41,6 @@ def display_resized_image(image_path: str, caption: str, max_width: int = 800) -
             img = Image.open(image_path)
             original_width, original_height = img.size  # Get original dimensions
             new_width = original_width  # Use full original width (2x from previous half size)
-            # Optionally, cap at max_width if it’s too large for the layout
             new_width = min(new_width, max_width * 2)  # Allow 2x max_width for "2x bigger"
             st.image(img, caption=caption, width=new_width)  # Display at new width
             logger.debug(f"display_resized_image: Displayed image with original_width={original_width}, new_width={new_width}")
@@ -59,7 +61,6 @@ def display_dataframe_section(section_name: str, csv_path: str) -> None:
         csv_path: Path to the CSV file for the dataframe.
     """
     logger.debug("display_dataframe_section: Displaying Dataframe subsection")
-    # Custom CSS to make the content box 2x wider
     st.markdown("""
     <style>
     .content-box {
@@ -70,7 +71,6 @@ def display_dataframe_section(section_name: str, csv_path: str) -> None:
     </style>
     <div class="content-box">""", unsafe_allow_html=True)
 
-    # Load DataFrame - Removed DataFrame display
     logger.debug(f"display_dataframe_section: DataFrame loading is disabled in this version.")
     if os.path.exists(csv_path):
         try:
@@ -92,42 +92,75 @@ def display_dataframe_section(section_name: str, csv_path: str) -> None:
     - The final dataset had a shape of (60875, 2), with 12175 reviews per rating, from all 138 categories available on the website.
     """)
 
-    # Add the plot here, now 2x bigger (full original size)
     image_path: str = os.path.join(IMAGES_DIR, 'countplot_scrape_2.png')
     display_resized_image(image_path, "Customer Rating Distribution from Subsequent Scrape", max_width=800)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
 
-def display_eda_section(section_name: str, eda_image_paths: Optional[List[Tuple[str, str]]] = None) -> None:
-    """Displays the EDA subsection for a given section.
+def display_eda_section(section_name: str, eda_image_paths: Optional[List[Tuple[str, str]]] = None, sub_section: str = None) -> None:
+    """Displays the EDA subsection for a given section, including Ngram and Scrape Comparison plots.
 
     Args:
         section_name: The name of the section (for headers and potentially image paths).
         eda_image_paths: Optional list of tuples, where each tuple is (title, image_path) for EDA images.
+        sub_section: Specific EDA subsection to display (not used here, kept for compatibility).
     """
     logger.debug("display_eda_section: Displaying EDA subsection")
     st.markdown('<div class="content-box">', unsafe_allow_html=True)
     st.subheader("📊 Exploratory Data Analysis")
 
-    if eda_image_paths:
-        with st.expander("📷 Exploratory Data Analysis (Click to Expand)"):
-            for title, img_path in eda_image_paths:
-                display_resized_image(img_path, title)
+    # Ngram Analysis Plots
+    if os.path.exists(FABIAN_IMG_DIR):
+        ngram_images = []
+        for img_file in os.listdir(FABIAN_IMG_DIR):
+            if img_file.lower().endswith(('.png', '.jpg', '.jpeg')):
+                img_path = os.path.join(FABIAN_IMG_DIR, img_file)
+                caption = os.path.splitext(img_file)[0].replace('_', ' ').title()
+                ngram_images.append((caption, img_path))
+        ngram_images.sort(key=lambda x: int(x[1].split(os.sep)[-1].split('_')[0]))
+        if ngram_images:
+            with st.expander("📷 Ngram Analysis Plots (Click to Expand)"):
+                for title, img_path in ngram_images:
+                    display_resized_image(img_path, title)
+        else:
+            st.info("No Ngram images found in the specified directory.")
     else:
-        st.info("No EDA images provided for this section.")
+        st.warning(f"⚠️ Ngram directory not found: {FABIAN_IMG_DIR}")
+
+    # Scrape Comparison Plots
+    if os.path.exists(SCRAPE_1_DIR) and os.path.exists(SCRAPE_2_DIR):
+        scrape_1_images = [(f"Initial Scrape: {os.path.splitext(img_file)[0].replace('_', ' ').title()}", 
+                            os.path.join(SCRAPE_1_DIR, img_file)) 
+                           for img_file in os.listdir(SCRAPE_1_DIR) 
+                           if img_file.lower().endswith(('.png', '.jpg', '.jpeg'))]
+        scrape_2_images = [(f"Subsequent Scrape: {os.path.splitext(img_file)[0].replace('_', ' ').title()}", 
+                            os.path.join(SCRAPE_2_DIR, img_file)) 
+                           for img_file in os.listdir(SCRAPE_2_DIR) 
+                           if img_file.lower().endswith(('.png', '.jpg', '.jpeg'))]
+
+        scrape_1_images.sort(key=lambda x: x[1].split(os.sep)[-1])
+        scrape_2_images.sort(key=lambda x: x[1].split(os.sep)[-1])
+
+        if scrape_1_images or scrape_2_images:
+            with st.expander("📷 Scrape Comparison Plots (Click to Expand)"):
+                for title, img_path in scrape_1_images + scrape_2_images:
+                    display_resized_image(img_path, title)
+        else:
+            st.info("No scrape comparison images found in the specified directories.")
+    else:
+        if not os.path.exists(SCRAPE_1_DIR):
+            st.warning(f"⚠️ Initial scrape directory not found: {SCRAPE_1_DIR}")
+        if not os.path.exists(SCRAPE_2_DIR):
+            st.warning(f"⚠️ Subsequent scrape directory not found: {SCRAPE_2_DIR}")
 
     st.markdown("### 📝 Analysis")
-    st.write("EDA visualizations provide insights into data distributions and trends.")
+    st.write("EDA visualizations provide insights into data distributions and trends, including Ngram analysis and comparisons between initial and subsequent scrapes.")
     st.markdown('</div>', unsafe_allow_html=True)
 
 
 def display_preprocessing_section(preprocessing_steps: Optional[List[str]] = None) -> None:
-    """Displays the Preprocessing subsection.
-
-    Args:
-        preprocessing_steps: Optional list of preprocessing steps to display as a bullet list.
-    """
+    """Displays the Preprocessing subsection."""
     logger.debug("display_preprocessing_section: Displaying Preprocessing subsection")
     st.markdown('<div class="content-box">', unsafe_allow_html=True)
     st.subheader("🛠 Data Preprocessing")
@@ -143,17 +176,13 @@ def display_preprocessing_section(preprocessing_steps: Optional[List[str]] = Non
         - **Step 2**: ...
         - **Step 3**: ...
         - **Step 4**: ...
-        """)  # Generic steps if none provided
+        """)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
 
 def display_models_section(model_image_paths: Optional[List[Tuple[str, str]]] = None) -> None:
-    """Displays the Models subsection.
-
-    Args:
-        model_image_paths: Optional list of tuples, where each tuple is (title, image_path) for model result images.
-    """
+    """Displays the Models subsection."""
     logger.debug("display_models_section: Displaying Models subsection")
     st.markdown('<div class="content-box">', unsafe_allow_html=True)
     st.subheader("🤖 Modeling")
@@ -177,7 +206,7 @@ def show_general_section(section_name: str = "analysis", subsections: Optional[L
     Args:
         section_name: The name of the section to display (e.g., "sports", "finance").
         subsections: List of subsections to include (e.g., ["Dataframe", "EDA", "Preprocessing", "Models"]).
-                     Defaults to ["Dataframe", "EDA", "Preprocessing", "Models"] if None.
+                     Defaults to simplified list if None.
         section_key_prefix: Prefix for Streamlit keys to avoid collisions if multiple general sections are used.
     """
     logger.info(f"show_general_section: Starting for section_name='{section_name}'")
@@ -186,32 +215,25 @@ def show_general_section(section_name: str = "analysis", subsections: Optional[L
         raise TypeError(f"section_name must be a string, got {type(section_name)}")
 
     if subsections is None:
-        subsections = ["Dataframe", "EDA", "Preprocessing", "Models"]  # Removed "Scraping Details"
+        subsections = ["Dataframe", "EDA", "Preprocessing", "Models"]
 
     logger.debug(f"show_general_section: Showing section: {section_name}")
-    st.header(f"📊 General Analysis")  # Fixed to "General Analysis"
+    st.header(f"📊 General Analysis")
 
-    # Sub-Selection for Section
     subsection_choice: str = st.radio(
         f"🔹 Choose a {section_name.capitalize()} Section:",
         subsections,
         index=0,
-        key=f"{section_key_prefix}_subsection_{section_name}"  # Ensure unique key, using prefix
+        key=f"{section_key_prefix}_subsection_{section_name}"
     )
     logger.debug(f"show_general_section: Selected subsection: {subsection_choice}")
 
     if subsection_choice == "Dataframe":
-        csv_file_path = 'trustpilot_reviews_1000.csv'  # General path - adjust as needed
+        csv_file_path = 'trustpilot_reviews_1000.csv'
         display_dataframe_section(section_name, csv_file_path)
 
     elif subsection_choice == "EDA":
-        eda_images = [
-            ("Rating distribution", os.path.join(IMAGES_DIR, f"Rating distribution {section_name.lower()}.png")),
-            ("Sentiment distribution", os.path.join(IMAGES_DIR, f"Sentiment {section_name.lower()}.png")),
-            ("Top 10 Word Ranking", os.path.join(IMAGES_DIR, "Word ranking top 10.png")),
-            ("Top 10 Negative Word Ranking", os.path.join(IMAGES_DIR, "Word Ranking neg 10.png")),
-        ]
-        display_eda_section(section_name, eda_images)
+        display_eda_section(section_name)
 
     elif subsection_choice == "Preprocessing":
         preprocessing_steps_list = ["Data Cleaning", "Feature Engineering", "Normalization/Scaling", "Handling Missing Values"]
@@ -228,6 +250,6 @@ def show_general_section(section_name: str = "analysis", subsections: Optional[L
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)  # Configure basic logging if running standalone
-    st.set_page_config(layout="wide")  # Optional: Set page layout if running standalone
-    show_general_section(section_name="General")  # Changed to "General"
+    logging.basicConfig(level=logging.DEBUG)
+    st.set_page_config(layout="wide")
+    show_general_section(section_name="General")
