@@ -46,7 +46,9 @@ def display_resized_image(image_path: str, caption: str, max_width: int = 800) -
         logger.warning(f"display_resized_image: Image not found: {image_path}")
     logger.info(f"display_resized_image: Finished for image_path='{image_path}'")
 
-def display_dataframe_section(section_name: str, csv_path: str) -> None:
+# general_section.py (modified excerpt)
+
+def display_dataframe_section(section_name: str) -> None:
     logger.debug("display_dataframe_section: Displaying Dataframe subsection")
     st.markdown("""
     <style>
@@ -58,17 +60,8 @@ def display_dataframe_section(section_name: str, csv_path: str) -> None:
     </style>
     <div class="content-box">""", unsafe_allow_html=True)
 
-    logger.debug(f"display_dataframe_section: DataFrame loading is disabled in this version.")
-    if os.path.exists(csv_path):
-        try:
-            pd.read_csv(csv_path)
-            logger.debug("display_dataframe_section: DataFrame loaded (not displayed).")
-        except Exception as e:
-            logger.exception(f"display_dataframe_section: Error loading DataFrame from '{csv_path}': {e}")
-            st.error(f"Error loading DataFrame in background. Check logs for details.")
-    else:
-        st.warning(f"⚠️ CSV file not found: {csv_path}")
-        logger.warning(f"display_dataframe_section: CSV file not found: {csv_path}")
+    # Removed CSV loading logic since it's not used
+    logger.debug("display_dataframe_section: DataFrame loading is disabled in this version.")
 
     st.markdown("### 📝 Description")
     st.markdown("""
@@ -83,6 +76,43 @@ def display_dataframe_section(section_name: str, csv_path: str) -> None:
     display_resized_image(image_path, "Customer Rating Distribution from Subsequent Scrape", max_width=800)
 
     st.markdown('</div>', unsafe_allow_html=True)
+
+def show_general_section(section_name: str = "analysis", subsections: Optional[List[str]] = None, section_key_prefix: str = "general_section") -> None:
+    logger.info(f"show_general_section: Starting for section_name='{section_name}'")
+    if not isinstance(section_name, str):
+        logger.error(f"show_general_section: section_name is not a string: {type(section_name)}")
+        raise TypeError(f"section_name must be a string, got {type(section_name)}")
+
+    if subsections is None:
+        subsections = ["Dataframe", "EDA", "Models", "Sentiment Prediction", "Conclusion"]
+
+    st.header(f"📊 General Analysis")
+
+    subsection_choice: str = st.radio(
+        f"🔹 Choose a {section_name.capitalize()} Section:",
+        subsections,
+        index=0,
+        key=f"{section_key_prefix}_subsection_{section_name}"
+    )
+    logger.debug(f"show_general_section: Selected subsection: {subsection_choice}")
+
+    if subsection_choice == "Dataframe":
+        # No CSV path needed anymore
+        display_dataframe_section(section_name)
+
+    elif subsection_choice == "EDA":
+        display_eda_section(section_name)
+
+    elif subsection_choice == "Models":
+        display_models_section()
+
+    elif subsection_choice == "Sentiment Prediction":
+        display_sentiment_prediction_section()
+
+    elif subsection_choice == "Conclusion":
+        display_conclusion_section()
+
+    logger.info(f"show_general_section: Finished for section_name='{section_name}'")
 
 def display_eda_section(section_name: str, eda_image_paths: Optional[List[Tuple[str, str]]] = None, sub_section: str = None) -> None:
     logger.debug("display_eda_section: Displaying EDA subsection")
@@ -235,8 +265,8 @@ def show_general_section(section_name: str = "analysis", subsections: Optional[L
     logger.debug(f"show_general_section: Selected subsection: {subsection_choice}")
 
     if subsection_choice == "Dataframe":
-        csv_file_path = 'trustpilot_reviews_1000.csv'
-        display_dataframe_section(section_name, csv_file_path)
+        # No CSV path needed anymore
+        display_dataframe_section(section_name)
 
     elif subsection_choice == "EDA":
         display_eda_section(section_name)
@@ -251,8 +281,3 @@ def show_general_section(section_name: str = "analysis", subsections: Optional[L
         display_conclusion_section()
 
     logger.info(f"show_general_section: Finished for section_name='{section_name}'")
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    st.set_page_config(layout="wide")
-    show_general_section(section_name="General")
