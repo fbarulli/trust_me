@@ -70,7 +70,7 @@ def display_dataframe_section(section_name: str, csv_path: str) -> None:
         st.warning(f"⚠️ CSV file not found: {csv_path}")
         logger.warning(f"display_dataframe_section: CSV file not found: {csv_path}")
 
-    st.markdown("### Conclusion: I was not able to fully figure out how to solve this problem. For now, a model per category is the best solution.")
+    st.markdown("### 📝 Description")
     st.markdown("""
     - In this scenario, I decided to scrape a balanced dataset.\n
     - Main reason for doing this was because I would have to modify training to accommodate an unbalanced dataset.\n
@@ -89,59 +89,24 @@ def display_eda_section(section_name: str, eda_image_paths: Optional[List[Tuple[
     st.markdown('<div class="content-box">', unsafe_allow_html=True)
     st.subheader("📊 Exploratory Data Analysis")
 
-    if os.path.exists(SCRAPE_1_DIR) and os.path.exists(SCRAPE_2_DIR):
-        scrape_1_images = [(f"Initial Scrape: {os.path.splitext(img_file)[0].replace('_', ' ').title()}", 
-                            os.path.join(SCRAPE_1_DIR, img_file)) 
-                           for img_file in os.listdir(SCRAPE_1_DIR) 
-                           if img_file.lower().endswith(('.png', '.jpg', '.jpeg'))]
+    if os.path.exists(SCRAPE_2_DIR):
         scrape_2_images = [(f"Subsequent Scrape: {os.path.splitext(img_file)[0].replace('_', ' ').title()}", 
                             os.path.join(SCRAPE_2_DIR, img_file)) 
                            for img_file in os.listdir(SCRAPE_2_DIR) 
                            if img_file.lower().endswith(('.png', '.jpg', '.jpeg'))]
 
-        scrape_1_images.sort(key=lambda x: x[1].split(os.sep)[-1])
         scrape_2_images.sort(key=lambda x: x[1].split(os.sep)[-1])
 
-        if scrape_1_images or scrape_2_images:
+        if scrape_2_images:
             with st.expander("📷 Scrape Comparison Plots (Click to Expand)"):
-                max_pairs = min(len(scrape_1_images), len(scrape_2_images))
-                if max_pairs == 0:
-                    st.info("No matching images found for comparison.")
-                else:
-                    for i in range(max_pairs):
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            display_resized_image(scrape_1_images[i][1], scrape_1_images[i][0])
-                        with col2:
-                            display_resized_image(scrape_2_images[i][1], scrape_2_images[i][0])
+                st.write("We can see here both the unprocessed df vs the processed df")
+                for title, img_path in scrape_2_images:
+                    display_resized_image(img_path, title)
                 st.write("As we can see, most words appear with good and bad sentiment, making this a difficult task.")
         else:
-            st.info("No scrape comparison images found in the specified directories.")
+            st.info("No scrape comparison images found in the specified directory.")
     else:
-        if not os.path.exists(SCRAPE_1_DIR):
-            st.warning(f"⚠️ Initial scrape directory not found: {SCRAPE_1_DIR}")
-        if not os.path.exists(SCRAPE_2_DIR):
-            st.warning(f"⚠️ Subsequent scrape directory not found: {SCRAPE_2_DIR}")
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-def display_preprocessing_section(preprocessing_steps: Optional[List[str]] = None) -> None:
-    logger.debug("display_preprocessing_section: Displaying Preprocessing subsection")
-    st.markdown('<div class="content-box">', unsafe_allow_html=True)
-    st.subheader("🛠 Data Preprocessing")
-    st.write("The steps of data preprocessing will be described here later.")
-
-    if preprocessing_steps:
-        st.markdown("""
-        {}
-        """.format('\n'.join([f"- **Step {i+1}**: {step}" for i, step in enumerate(preprocessing_steps)])))
-    else:
-        st.markdown("""
-        - **Step 1**: ...
-        - **Step 2**: ...
-        - **Step 3**: ...
-        - **Step 4**: ...
-        """)
+        st.warning(f"⚠️ Subsequent scrape directory not found: {SCRAPE_2_DIR}")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -159,6 +124,7 @@ def display_models_section(model_image_paths: Optional[List[Tuple[str, str]]] = 
 
     if images_to_display:
         with st.expander("📷 Model Results (Click to Expand)"):
+            st.write("I was not able to fully optimize performance, nor was I able to fully understand why")
             for title, img_path in images_to_display:
                 logger.debug(f"display_models_section: Trying to display image: {img_path}")
                 display_resized_image(img_path, title)
@@ -217,6 +183,38 @@ def display_sentiment_prediction_section():
     
     st.markdown('</div>', unsafe_allow_html=True)
 
+def display_conclusion_section():
+    """Displays the Conclusion subsection."""
+    logger.debug("display_conclusion_section: Displaying Conclusion subsection")
+    st.markdown('<div class="content-box">', unsafe_allow_html=True)
+    st.subheader("📌 Conclusion")
+
+    st.markdown("""
+- **Models**:  
+I started with traditional ML, testing several boosting models, SVM, and Linear Regression, and Attention-based Deep Learning models. From there, I chose the best-performing ML models for baselines and for Optuna trials, and the same for Deep Learning. Some of the DL models used were:  
+*{LoRA on big BERT, Roberta, Electra, BERT, SA-BERT}*
+
+- **Preprocessing**:  
+After several trials and experimentation with preprocessing and unprocessed data, performance never really improved.
+There were many instances of single words that potentially could have been used in some other way, but I mainly focused on:  
+*{Standardizing dates, contractions, websites, and special characters. Non-alphanumeric word removal, words with a less than 10 count}*
+
+- **Feature Engineering**:  
+Several techniques were used to boost performance:  
+*{CountV, TFIDF, stop word removal, sentiment intensity, text feature extraction, text summarization, Topic modeling, NGRAM, NER, POS, VADER, Embeddings, data augmentation, embedding fine-tuning with whole word masking and Span Masking, InfoNCELoss}*  
+were tried only to, in most cases, decrease performance. No feature engineering improved ML score, and the only feature that boosted performance significantly was embeddings for BERT.
+
+- **Training**:  
+With the initial dataset, I was able to get up to 80%, accuracy usign ML models. With the same dataset, deep learning models scored 60% at best. However with the second dataset, 
+performed 40% worse than the first dataset, and deep learning model performance did not change.                 
+
+- **Conclusion**:  
+In conclusion, the majority (90%) of words only appear less than 10 times in the dataset. In theory, there are a lot of specific mentions of products from all categories—be that services, experiences, products, etc.—that I was not able to fully account for. Even when using pre-trained models with sentiment awareness and feature engineering, a better score was not possible to achieve.  
+All in all, to effectively tackle this problem, a specific model for each category seems to yield the best result.
+    """)
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
 def show_general_section(section_name: str = "analysis", subsections: Optional[List[str]] = None, section_key_prefix: str = "general_section") -> None:
     logger.info(f"show_general_section: Starting for section_name='{section_name}'")
     if not isinstance(section_name, str):
@@ -224,7 +222,7 @@ def show_general_section(section_name: str = "analysis", subsections: Optional[L
         raise TypeError(f"section_name must be a string, got {type(section_name)}")
 
     if subsections is None:
-        subsections = ["Dataframe", "EDA", "Preprocessing", "Models", "Sentiment Prediction"]
+        subsections = ["Dataframe", "EDA", "Models", "Sentiment Prediction", "Conclusion"]
 
     st.header(f"📊 General Analysis")
 
@@ -243,15 +241,14 @@ def show_general_section(section_name: str = "analysis", subsections: Optional[L
     elif subsection_choice == "EDA":
         display_eda_section(section_name)
 
-    elif subsection_choice == "Preprocessing":
-        preprocessing_steps_list = ["Data Cleaning", "Feature Engineering", "Normalization/Scaling", "Handling Missing Values"]
-        display_preprocessing_section(preprocessing_steps_list)
-
     elif subsection_choice == "Models":
         display_models_section()
 
     elif subsection_choice == "Sentiment Prediction":
         display_sentiment_prediction_section()
+
+    elif subsection_choice == "Conclusion":
+        display_conclusion_section()
 
     logger.info(f"show_general_section: Finished for section_name='{section_name}'")
 
