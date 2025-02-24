@@ -1,0 +1,247 @@
+accelerator: gpu
+adam_epsilon: 1.0e-08
+advanced_search:
+  default_importance: 0.5
+  gmm_covariance_type: full
+  gmm_n_components: 3
+  importance_denominator: 4
+  importance_width_factor: 2
+data_module:
+  batch_size: 32
+  data_path: data/so_many_rev.csv
+  max_length: 128
+  model_name: bert-base-uncased
+  num_workers: 4
+  rating_column: rating
+  text_column: text
+devices: 1
+directories:
+  data_dir: data
+  model_cache_dir: results/model_cache
+  ray_results_dir: results/ray_results
+  results_dir: results
+  training_data_dir: data/so_many_rev.csv
+hidden_dropout_prob: 0.1
+initialization:
+  bias_init_val: 0.0
+  classifier_bias_val: 0.0
+  classifier_weight_std: 0.02
+  layer_norm_bias_val: 0.0
+  layer_norm_weight_val: 1.0
+  weight_init_gain: 0.5
+max_grad_norm: 1.0
+model:
+  base_model_name: bert-base-uncased
+  num_labels: 5
+model_architecture:
+  pooling_head:
+    dense_reduction_factor: 4
+    dropout_prob: 0.1
+    enable_spectral_norm: true
+    spectral_norm:
+      num_iters: 1
+  unfrozen_layers: 3
+model_name: bert-base-uncased
+network_training:
+  fgm:
+    default_epsilon: 1.0
+    emb_name: word_embeddings
+  gradient_control:
+    clip_norm_type: 2
+    clip_value: 1.0
+    detect_anomaly: true
+    log_interval: 100
+    scale_coefficient: 0.5
+  lr_scheduler:
+    anneal_strategy: linear
+    div_factor: 25.0
+    factor: 0.1
+    final_div_factor: 5000.0
+    patience: 5
+    pct_start: 0.1
+    type: onecycle
+    verbose: true
+  mixout:
+    p: 0.5
+    scale_to_dropout: true
+  optimizer:
+    beta1: 0.9
+    beta2: 0.999
+    eps: 1.0e-08
+    learning_rate: 1e-5
+    weight_decay: 0.01
+num_labels: 5
+regularization:
+  attention_dropout: 0.1
+  classifier_dropout: 0.2
+  ema_decay: 0.999
+  focal_alpha: 0.25
+  focal_gamma: 2.0
+  gradient_clipping:
+    clip_value: 0.5
+    enabled: true
+    max_norm: 0.5
+    norm_type: 2
+  hidden_dropout: 0.1
+  label_smoothing: 0.1
+  layer_decay:
+    decay_rate: 0.95
+    enabled: true
+    exclude_layers:
+    - bias
+    - LayerNorm.weight
+  mixup_alpha: 0.2
+  rdrop_alpha: 0.3
+  swa:
+    anneal_epochs: 3
+    anneal_strategy: cos
+    enabled: true
+    epochs: 5
+    lr: 1e-5
+  use_ema: true
+  use_focal: true
+  weight_decay: 0.01
+scheduler:
+  grace_period: 3
+  max_t: 20
+  metric: val_loss
+  mode: min
+  reduction_factor: 3
+  time_attr: training_iteration
+search_space:
+  adam_epsilon:
+    max: 1.0e-07
+    min: 1.0e-09
+    type: loguniform
+  adv_epsilon:
+    max: 0.3
+    min: 0.1
+    type: uniform
+  adv_training:
+    type: categorical
+    values:
+    - true
+  attention_probs_dropout_prob:
+    max: 0.5
+    min: 0.1
+    type: uniform
+  batch_size:
+    type: categorical
+    values:
+    - 64
+    - 128
+  gradient_accumulation_steps:
+    type: categorical
+    values:
+    - 1
+    - 2
+  gradient_checkpointing:
+    type: categorical
+    values:
+    - true
+    - false
+  hidden_dropout_prob:
+    max: 0.5
+    min: 0.1
+    type: uniform
+  hidden_layer_dropout:
+    max: 0.5
+    min: 0.3
+    type: uniform
+  initial_learning_rate:
+    max: 5.0e-05
+    min: 1.0e-06
+    type: loguniform
+  intermediate_size_factor:
+    type: categorical
+    values:
+    - 2.0
+    - 2.5
+    - 3.0
+    - 4.0
+  label_smoothing:
+    max: 0.2
+    min: 0.1
+    type: uniform
+  layer_norm_eps:
+    max: 1.0e-05
+    min: 1.0e-12
+    type: loguniform
+  learning_rate:
+    max: 5.0e-05
+    min: 1.0e-06
+    type: loguniform
+  max_grad_norm:
+    max: 1.0
+    min: 0.5
+    type: uniform
+  max_lr:
+    max: 2.0e-05
+    min: 5.0e-06
+    type: loguniform
+  model_dropout_rate:
+    max: 0.7
+    min: 0.3
+    type: uniform
+  num_attention_heads:
+    type: categorical
+    values:
+    - 8
+    - 12
+  rdrop_alpha:
+    max: 0.4
+    min: 0.2
+    type: uniform
+  use_mixout:
+    type: categorical
+    values:
+    - false
+    - true
+  use_swa:
+    type: categorical
+    values:
+    - true
+  warmup_steps:
+    type: categorical
+    values:
+    - 100
+    - 200
+    - 300
+    - 500
+  weight_decay:
+    max: 0.001
+    min: 1.0e-06
+    type: loguniform
+seed: 42
+total_steps: 1000
+training:
+  adv_training: true
+  cpus_per_trial: 1
+  early_stopping_patience: 5
+  error_if_nonfinite: false
+  fp16_training: true
+  gpus_per_trial: 0.25
+  grad_queue_size: 100
+  grad_scaler:
+    backoff_factor: 0.5
+    enabled_if_half: true
+    growth_factor: 1.5
+    growth_interval: 100
+    init_scale: 16384
+  gradient_accumulation_steps: 1
+  gradient_clip_algorithm: norm
+  gradient_clip_val: 0.5
+  initial_learning_rate: 5e-6
+  max_concurrent_trials: 4
+  num_samples: 1000
+  precision: 16
+  rdrop_start_epoch: 1
+use_tune: true
+validation:
+  checkpoint_top_k: 1
+  log_interval: step
+  monitor_metric: val_loss
+  monitor_mode: min
+wandb:
+  project_name: ray_tune
+weight_decay: 0.01
