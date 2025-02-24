@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 APP_DIR: str = os.path.dirname(os.path.abspath(__file__))  # general_section.py's directory (same as stream.py)
 PARENT_DIR: str = os.path.dirname(APP_DIR)  # Parent directory of streamlit_app (trust-me-data-analysis)
 IMAGES_DIR: str = os.path.join(APP_DIR, 'Images')  # Define IMAGES_DIR globally
-FABIAN_IMG_DIR: str = os.path.join(IMAGES_DIR, 'fabian_img/ngram')  # Subdirectory for Ngram images
 SCRAPE_1_DIR: str = os.path.join(IMAGES_DIR, 'fabian_img', 'ngram_sentiment', 'scrape_1')  # Initial scrape images
 SCRAPE_2_DIR: str = os.path.join(IMAGES_DIR, 'fabian_img', 'ngram_sentiment', 'scrape_2')  # Subsequent scrape images
 
@@ -99,7 +98,7 @@ def display_dataframe_section(section_name: str, csv_path: str) -> None:
 
 
 def display_eda_section(section_name: str, eda_image_paths: Optional[List[Tuple[str, str]]] = None, sub_section: str = None) -> None:
-    """Displays the EDA subsection for a given section, including Ngram and Scrape Comparison plots.
+    """Displays the EDA subsection for a given section, with Scrape Comparison plots.
 
     Args:
         section_name: The name of the section (for headers and potentially image paths).
@@ -110,25 +109,7 @@ def display_eda_section(section_name: str, eda_image_paths: Optional[List[Tuple[
     st.markdown('<div class="content-box">', unsafe_allow_html=True)
     st.subheader("📊 Exploratory Data Analysis")
 
-    # Ngram Analysis Plots
-    if os.path.exists(FABIAN_IMG_DIR):
-        ngram_images = []
-        for img_file in os.listdir(FABIAN_IMG_DIR):
-            if img_file.lower().endswith(('.png', '.jpg', '.jpeg')):
-                img_path = os.path.join(FABIAN_IMG_DIR, img_file)
-                caption = os.path.splitext(img_file)[0].replace('_', ' ').title()
-                ngram_images.append((caption, img_path))
-        ngram_images.sort(key=lambda x: int(x[1].split(os.sep)[-1].split('_')[0]))
-        if ngram_images:
-            with st.expander("📷 Ngram Analysis Plots (Click to Expand)"):
-                for title, img_path in ngram_images:
-                    display_resized_image(img_path, title)
-        else:
-            st.info("No Ngram images found in the specified directory.")
-    else:
-        st.warning(f"⚠️ Ngram directory not found: {FABIAN_IMG_DIR}")
-
-    # Scrape Comparison Plots
+    # Scrape Comparison Plots (side-by-side)
     if os.path.exists(SCRAPE_1_DIR) and os.path.exists(SCRAPE_2_DIR):
         scrape_1_images = [(f"Initial Scrape: {os.path.splitext(img_file)[0].replace('_', ' ').title()}", 
                             os.path.join(SCRAPE_1_DIR, img_file)) 
@@ -144,8 +125,17 @@ def display_eda_section(section_name: str, eda_image_paths: Optional[List[Tuple[
 
         if scrape_1_images or scrape_2_images:
             with st.expander("📷 Scrape Comparison Plots (Click to Expand)"):
-                for title, img_path in scrape_1_images + scrape_2_images:
-                    display_resized_image(img_path, title)
+                max_pairs = min(len(scrape_1_images), len(scrape_2_images))
+                if max_pairs == 0:
+                    st.info("No matching images found for comparison.")
+                else:
+                    for i in range(max_pairs):
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            display_resized_image(scrape_1_images[i][1], scrape_1_images[i][0])
+                        with col2:
+                            display_resized_image(scrape_2_images[i][1], scrape_2_images[i][0])
+                st.write("As we can see, most words appear with good and bad sentiment, making this a difficult task.")
         else:
             st.info("No scrape comparison images found in the specified directories.")
     else:
@@ -154,8 +144,6 @@ def display_eda_section(section_name: str, eda_image_paths: Optional[List[Tuple[
         if not os.path.exists(SCRAPE_2_DIR):
             st.warning(f"⚠️ Subsequent scrape directory not found: {SCRAPE_2_DIR}")
 
-    st.markdown("### 📝 Analysis")
-    st.write("EDA visualizations provide insights into data distributions and trends, including Ngram analysis and comparisons between initial and subsequent scrapes.")
     st.markdown('</div>', unsafe_allow_html=True)
 
 
