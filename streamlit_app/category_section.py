@@ -81,8 +81,11 @@ def show_category_section(category_name: str = "sports") -> None:
         eda_images: List[Tuple[str, str]] = [
             ("Rating distribution", os.path.join(IMAGES_DIR, f"Rating distribution {category_name}.png")),
             ("Sentiment distribution", os.path.join(IMAGES_DIR, f"Sentiment {category_name}.png")),
-            ("Top 10 Word Ranking", os.path.join(IMAGES_DIR, "Word ranking top 10.png")),
-            ("Top 10 Negative Word Ranking", os.path.join(IMAGES_DIR, "Word Ranking neg 10.png")),
+            ("Word Cloud 1", os.path.join(IMAGES_DIR, "Wordcloud 1.png")),
+            ("Word Cloud 2", os.path.join(IMAGES_DIR, "Wordcloud 2.png")),
+            ("Word Cloud 3", os.path.join(IMAGES_DIR, "Wordcloud 3.png")),
+            ("Word Cloud 4", os.path.join(IMAGES_DIR, "Wordcloud 4.png")),
+            ("Word Cloud 5", os.path.join(IMAGES_DIR, "Wordcloud 5.png")),
         ]
 
         with st.expander("📷 Exploratory Data Analysis (Click to Expand)"):
@@ -93,9 +96,10 @@ def show_category_section(category_name: str = "sports") -> None:
         st.markdown("""
         - **Rating Distribution:** A strong bias towards 5-star reviews, requiring mitigation via **SMOTE (Synthetic Minority Over-sampling Technique)**.
         - **Sentiment Analysis:** Using **TextBlob**, we confirmed a strong correlation between sentiment polarity and ratings.
-        - **Word Rankings:**
-          - Positive reviews frequently mentioned words like **'great,' 'fast,' and 'recommend.'**
-          - Negative reviews focused on terms such as **'delay,' 'order,' and 'customer service.'**
+        - **Word Clouds:** 
+          - Word clouds visualize frequently used words in **positive and negative reviews**.
+          - Common positive words: **'great,' 'fast,' 'recommend'**.
+          - Common negative words: **'delay,' 'order,' 'customer service'**.
         """)
 
         st.markdown('</div>', unsafe_allow_html=True)
